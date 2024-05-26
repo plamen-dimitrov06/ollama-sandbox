@@ -14,9 +14,20 @@ services:
             - driver: nvidia
               count: all
               capabilities: [gpu]
+
   web:
     image: nginx
     ports:
       - '8080:80'
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - back-end
+
+  back-end:
+    image: php:8.2-fpm
+    volumes:
+      - ./src:/var/www/html
 volumes:
   ollama:
